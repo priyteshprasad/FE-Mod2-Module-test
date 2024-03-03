@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .none {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="d-flex justify-content-center mt-5">
+        <form id="signupForm" class="w-75">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email:</label>
+                <input type="email" class="form-control" id="email" name="email" onChange="validateEmail()"
+                    placeholder="Example@email.com" required>
+                <span id="emailError" class="error"></span><br>
+            </div>
+            <div class="">
+                <label for="password" class="form-label">Password:</label>
+                <input type="password" id="password" class="form-control" name="password" placeholder="Your Password"
+                    onChange="validatePassword()" required>
+                <span id="passwordError" class="error"></span><br>
+            </div>
+            <div class="mb-3">
+                <span id="allGood" class="none success mb-3">All good to go!</span><br>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="submitForm()">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        const emailInput = document.getElementById('email');
+        const emailError = document.getElementById('emailError');
+        const passwordInput = document.getElementById('password');
+        const passwordError = document.getElementById('passwordError');
+        const allGood = document.getElementById("allGood")
+        let isPasswordCorrect = false;
+        let isEmailCorrect = false;
+
+        emailInput.addEventListener("input", validateEmail)
+        passwordInput.addEventListener("input", validatePassword)
+
+        function validateEmail() {
+            const emailValue = emailInput.value.trim();
+
+            if (emailValue.length > 3 && emailValue.includes('@') && emailValue.includes('.')) {
+                emailError.textContent = '';
+                emailError.classList.remove('error');
+                emailError.classList.add('success');
+                isEmailCorrect = true
+            } else {
+                emailError.textContent = 'Make sure email is more than 3 characters and contain "@" and a "."';
+                emailError.classList.remove('success');
+                emailError.classList.add('error');
+                isEmailCorrect = false
+            }
+            if (isEmailCorrect && isPasswordCorrect) {
+                allGood.classList.remove("none")
+            } else {
+                allGood.classList.add("none")
+            }
+        }
+
+        function validatePassword() {
+            const passwordValue = passwordInput.value.trim();
+
+            if (passwordValue.length > 8) {
+                passwordError.textContent = '';
+                passwordError.classList.remove('error');
+                passwordError.classList.add('success');
+                isPasswordCorrect = true
+            } else {
+                passwordError.textContent = 'Make sure password is more than 8 characters.';
+                passwordError.classList.remove('success');
+                passwordError.classList.add('error');
+                isPasswordCorrect = false
+            }
+            if (isEmailCorrect && isPasswordCorrect) {
+                allGood.classList.remove("none")
+            } else {
+                allGood.classList.add("none")
+            }
+        }
+
+        function submitForm() {
+
+            if (emailError.classList.contains('success') && passwordError.classList.contains('success')) {
+                const confirmation = confirm('Do you want to submit the form?');
+
+                if (confirmation) {
+                    alert('Successful signup!');
+
+                } else {
+                    // Redirect to the same page and clear input values
+                    let signupForm = document.getElementById("signupForm")
+                    location.reload()
+                }
+            }
+            else {
+                alert('Please fix the errors before submitting.');
+            }
+        }
+    </script>
+
+</body>
+
+</html>
